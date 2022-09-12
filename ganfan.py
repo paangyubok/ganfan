@@ -32,7 +32,14 @@ def parse_question(quest: str) -> dict:
     tagset = parse_set(tagset_filepath)
     typeset = parse_set(typeset_filepath)
 
-    tag_tmp = [t for t in re.split("的", quest) if t]
+    idx = quest.rfind("的")
+    if idx == -1:
+        type_tmp = quest
+    else:
+        type_tmp = quest[idx+1:]
+        tag_tmp = quest[:idx]
+
+    tag_tmp = [t for t in re.split("的|或者|或", tag_tmp) if t]
     tag = []
     for t in tag_tmp:
         if t in tagset:
@@ -42,14 +49,12 @@ def parse_question(quest: str) -> dict:
     ret["tag"] = tag
     
     type_ = []
-    if len(tag_tmp) > 0:
-        type_tmp = tag_tmp[-1]
-        type_tmp = [t for t in re.split("或|或者", type_tmp) if t]
-        for t in type_tmp:
-            if t in typeset:
-                type_ += typeset[t]
-            else:
-                type_.append(t)
+    type_tmp = [t for t in re.split("或者|或", type_tmp) if t]
+    for t in type_tmp:
+        if t in typeset:
+            type_ += typeset[t]
+        else:
+            type_.append(t)
     ret["type"] = type_
     return ret
 
@@ -86,8 +91,9 @@ def test():
     print(parse_set(tagset_filepath))
     print(parse_question("大概30到50的烤鱼"))
     print(parse_question("南门的面"))
-    print(parse_question("大概50到80西门的龙湖外面的火锅"))
-    print(parse_question("饭堂或者商业街\n\r"))
+    print(parse_question("龙湖的面或者快餐"))
+    print(parse_question("大概50到80西门的适合聚餐的"))
+    print(parse_question("饭堂或者商业街的\n\r"))
     print(parse_choice(choice_filepath))
     print(search_restaurant("西门的火锅"))
 
