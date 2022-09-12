@@ -33,6 +33,8 @@ def parse_question(quest: str) -> dict:
     typeset = parse_set(typeset_filepath)
 
     idx = quest.rfind("的")
+    type_tmp = ""
+    tag_tmp = ""
     if idx == -1:
         type_tmp = quest
     else:
@@ -89,12 +91,11 @@ def search_restaurant(quest: str, r: int = 0) -> str:
 
 def test():
     print(parse_set(tagset_filepath))
-    print(parse_question("大概30到50的烤鱼"))
-    print(parse_question("南门的面"))
-    print(parse_question("龙湖的面或者快餐"))
-    print(parse_question("大概50到80西门的适合聚餐的"))
-    print(parse_question("饭堂或者商业街的\n\r"))
-    print(parse_choice(choice_filepath))
+    print(search_restaurant("大概30到50的烤鱼"))
+    print(search_restaurant("南门的面"))
+    print(search_restaurant("龙湖的面或者快餐"))
+    print(search_restaurant("大概50到80西门的适合聚餐的"))
+    print(search_restaurant("饭堂或者商业街的\r\n"))
     print(search_restaurant("西门的火锅"))
 
 def main():
@@ -110,5 +111,5 @@ def main():
     print(search_restaurant(quest, r))
 
 
-# test()
+test()
 main()
